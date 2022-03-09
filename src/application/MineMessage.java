@@ -12,7 +12,7 @@ public class MineMessage {
 	int neighbourBombs;
 
 	public MineMessage(ACTIONS action) {
-		this(action, 0, 0);
+		this(action, 0, 0, 0);
 	}
 
 	public MineMessage(ACTIONS action, int width, int height) {
@@ -20,6 +20,7 @@ public class MineMessage {
 		this.width = width;
 		this.height = height;
 	}
+
 	public MineMessage(ACTIONS action, int width, int height, int neighbourBombs) {
 		this.action = action;
 		this.width = width;
@@ -34,7 +35,7 @@ public class MineMessage {
 	public void setAction(ACTIONS action) {
 		this.action = action;
 	}
-	
+
 	public int getWidth() {
 		return width;
 	}
