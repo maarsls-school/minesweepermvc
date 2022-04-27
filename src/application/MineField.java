@@ -6,6 +6,7 @@ import java.util.Observable;
 import logic.BombField;
 import logic.EmptyField;
 import logic.Field;
+import strategies.PlayStrategy;
 
 public class MineField extends Observable {
 	enum ACTIONS {
@@ -16,6 +17,7 @@ public class MineField extends Observable {
 	private int width;
 	private int height;
 	private int bombs;
+	private PlayStrategy strategy;
 
 	public MineField(int width, int height, int bombs) {
 		matrix = new Field[height][width];
@@ -99,21 +101,24 @@ public class MineField extends Observable {
 	}
 
 	public void flagging(int x, int y) {
-		matrix[y][x].setFlag(!matrix[y][x].isFlag());
+		strategy.flagging(x, y);
+//		matrix[y][x].setFlag(!matrix[y][x].isFlag());
 		setChanged();
 		notifyObservers(new MineMessage(MineMessage.ACTIONS.FLAG, x, y));
 	}
 
 	public boolean set(int x, int y) {
-		matrix[y][x].setOpen(true);
+
+//		matrix[y][x].setOpen(true);
 		setChanged();
 		notifyObservers(new MineMessage(MineMessage.ACTIONS.CELL_SET, x, y,
 				matrix[y][x] instanceof EmptyField ? ((EmptyField) matrix[y][x]).getBombsCnt() : -1));
-		if (matrix[y][x] instanceof BombField) {
-			return false;
-		}
-		openNeighbour(x, y);
-		return true;
+		return strategy.set(x, y);
+//		if (matrix[y][x] instanceof BombField) {
+//			return false;
+//		}
+//		openNeighbour(x, y);
+//		return true;
 	}
 
 	public void play(int width, int height, ACTIONS action) {
@@ -123,7 +128,7 @@ public class MineField extends Observable {
 		} else if (action.equals(ACTIONS.FLAG)) {
 			flagging(width, height);
 		}
-		
+
 		if (won()) {
 			setChanged();
 			notifyObservers(new MineMessage(MineMessage.ACTIONS.WON));
@@ -135,21 +140,26 @@ public class MineField extends Observable {
 	}
 
 	public boolean won() {
-		int flags = 0;
-		for (int i = 0; i < getHeight(); i++) {
-			for (int h = 0; h < getWidth(); h++) {
-				if (matrix[i][h] instanceof BombField) {
-					if (matrix[i][h].isFlag()) {
-						flags++;
-					}
-				}
-			}
-		}
+//		int flags = 0;
+//		for (int i = 0; i < getHeight(); i++) {
+//			for (int h = 0; h < getWidth(); h++) {
+//				if (matrix[i][h] instanceof BombField) {
+//					if (matrix[i][h].isFlag()) {
+//						flags++;
+//					}
+//				}
+//			}
+//		}
+//
+//		if (flags == bombs) {
+//			return true;
+//		}
+//		return false;
+		return strategy.won();
+	}
 
-		if (flags == bombs) {
-			return true;
-		}
-		return false;
+	public int getBombs() {
+		return bombs;
 	}
 
 	public int getHeight() {
@@ -166,6 +176,14 @@ public class MineField extends Observable {
 
 	public void setWidth(int width) {
 		this.width = width;
+	}
+
+	public Field[][] getMatrix() {
+		return matrix;
+	}
+
+	public void setStrategy(PlayStrategy strategy) {
+		this.strategy = strategy;
 	}
 
 	public void toStringA() {

@@ -18,6 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import strategies.NormalStrategy;
 
 public class MineView extends Application implements Observer {
 	MineField model;
@@ -137,7 +138,8 @@ public class MineView extends Application implements Observer {
 	}
 
 	public static void main(String[] args) throws Exception {
-		MineField model = new MineField(10, 10, 20);
+		MineField model = new MineField(10, 10, 10);
+		model.setStrategy(new NormalStrategy(model));
 		model.toStringA();
 		MineControl control = new MineControl(model);
 		MineView view = new MineView(model, control);

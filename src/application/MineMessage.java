@@ -6,7 +6,6 @@ public class MineMessage {
 	};
 
 	ACTIONS action;
-	int pos;
 	int width;
 	int height;
 	int neighbourBombs;
@@ -52,9 +51,5 @@ public class MineMessage {
 		this.height = height;
 	}
 
-	@Override
-	public String toString() {
-		return "ACTION:" + action + "| POS:" + pos;
-	}
 
 }
